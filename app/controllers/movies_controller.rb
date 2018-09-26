@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
     if params[:sort_order].nil?
       @movies = Movie.all
     elsif params[:sort_order] == 'byTitle'
-      @movies = Movie.find(:all , :order => "title")
+      @movies = Movie.order("title ASC").all
     elsif params[:sort_order] == 'byReleaseDate'
       @movies = Movie.order(:release_date)
     end
