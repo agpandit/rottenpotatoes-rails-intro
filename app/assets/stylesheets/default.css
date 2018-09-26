@@ -49,6 +49,7 @@ table#movies th, table#movies td {
   text-align: left;
 }
 
+
 table#movies th.hilite {
   background-color: yellow;
 }
