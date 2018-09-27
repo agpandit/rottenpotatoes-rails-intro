@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
       end
     elsif (!session[:sort_order] && session[:ratings])
       @movies = Movie.where({rating: session[:ratings].keys})
-    elsif (session[:sort_order && session[:ratings]])
+    elsif (session[:sort_order] && session[:ratings])
       if session[:sort_order] == 'byTitle'
         @movies = Movie.where({rating: session[:ratings].keys}).order(:title)
       elsif session[:sort_order] == 'byReleaseDate'
