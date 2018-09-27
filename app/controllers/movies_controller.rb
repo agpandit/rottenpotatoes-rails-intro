@@ -11,7 +11,8 @@ class MoviesController < ApplicationController
   end
 
   def index
-
+    
+    # Setting session hashes and opraring with them for simplicity
     session[:ratings] = params[:ratings] if params[:ratings]
     session[:sort_order] = params[:sort_order] if params[:sort_order]
 
@@ -21,7 +22,8 @@ class MoviesController < ApplicationController
       redirect_to movies_path(ratings: session[:ratings], sort_order: session[:sort_order])
     end
     
-    # Form DB the query according to the passed sorting and filtering
+    # Form DB query according to the passed sorting and filtering
+    # All four possible combinations generate diffrent DB query
     if (session[:sort_order] && !session[:ratings])
       if session[:sort_order] == 'byTitle'
         @movies = Movie.order(:title)
@@ -45,6 +47,7 @@ class MoviesController < ApplicationController
       @selected_ratings = session[:ratings]
     else
       @selected_ratings = {}
+      # For all check boxes to appear checked
       @all_ratings.each do |x|
         @selected_ratings[x] = 1
       end
