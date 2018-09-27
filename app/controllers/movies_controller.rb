@@ -41,10 +41,10 @@ class MoviesController < ApplicationController
     end
     
     @all_ratings = Movie.all_ratings
-    if !session[:ratings].nil?
+    if session[:ratings]
       @selected_ratings = session[:ratings]
     else
-      @selected_ratings = {}
+      @selected_ratings = @all_ratings
     end
   end
 
