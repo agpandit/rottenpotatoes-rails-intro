@@ -44,7 +44,10 @@ class MoviesController < ApplicationController
     if session[:ratings]
       @selected_ratings = session[:ratings]
     else
-      @selected_ratings = @all_ratings
+      @selected_ratings = {}
+      @all_ratings.each do |x|
+        @selected_ratings[x] = 1
+      end
     end
   end
 
