@@ -11,10 +11,13 @@ class MoviesController < ApplicationController
   end
 
   def index
-    
     # Ordering only if the sort_order URL parameter is passed, if not fetching all movies
     if params[:sort_order].nil?
-      @movies = Movie.all
+      if params[:ratings].nil?
+        @movies = Movie.all
+      else
+        @movies = Movie.where({rating: params[:ratings].keys})
+      end
     elsif params[:sort_order] == 'byTitle'
       @movies = Movie.order(:title)
     elsif params[:sort_order] == 'byReleaseDate'
