@@ -11,7 +11,13 @@ class MoviesController < ApplicationController
   end
 
   def index
-    # Ordering only if the sort_order URL parameter is passed, if not fetching all movies
+    
+# As of part two these features of sorting and filtering are working exclusively 
+# i.e filtering works on the selected filters and when we click on sorting the
+# URL changes to include only sorting irrespective of the filters
+# This is done like mentioned in the homework description, since combination was
+# not required for the current part
+
     if params[:sort_order].nil?
       if params[:ratings].nil?
         @movies = Movie.all
@@ -30,7 +36,6 @@ class MoviesController < ApplicationController
     else
       @selected_ratings = {}
     end
-    
   end
 
   def new
