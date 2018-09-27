@@ -20,6 +20,9 @@ class MoviesController < ApplicationController
     elsif params[:sort_order] == 'byReleaseDate'
       @movies = Movie.order(:release_date)
     end
+    
+    @all_ratings = Movie.all_ratings
+    
   end
 
   def new
