@@ -15,13 +15,13 @@ class MoviesController < ApplicationController
     session[:ratings] = params[:ratings] if params[:ratings]
     session[:sort_order] = params[:sort_order] if params[:sort_order]
 
-    # redirect to RESTful path if session contains more info than provided in params
+    # redirect to RESTful path if session contains all the information
     if (!params[:ratings] && session[:ratings]) || (!params[:sort_order] && session[:sort_order])
       flash.keep
       redirect_to movies_path(ratings: session[:ratings], sort_order: session[:sort_order])
     end
     
-    # Form DB queries according to the passed sorting and filtering
+    # Form DB the query according to the passed sorting and filtering
     if (session[:sort_order] && !session[:ratings])
       if session[:sort_order] == 'byTitle'
         @movies = Movie.order(:title)
@@ -39,17 +39,6 @@ class MoviesController < ApplicationController
     else
       @movies = Movie.all
     end
-    #if params[:sort_order].nil?
-     # if params[:ratings].nil?
-      #  @movies = Movie.all
-      #else
-       # @movies = Movie.where({rating: params[:ratings].keys})
-      #end
-    #elsif params[:sort_order] == 'byTitle'
-     # @movies = Movie.order(:title)
-    #elsif params[:sort_order] == 'byReleaseDate'
-     # @movies = Movie.order(:release_date)
-    #end
     
     @all_ratings = Movie.all_ratings
     if !session[:ratings].nil?
