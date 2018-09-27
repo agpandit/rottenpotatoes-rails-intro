@@ -11,28 +11,49 @@ class MoviesController < ApplicationController
   end
 
   def index
-    
-# As of part two these features of sorting and filtering are working exclusively 
-# i.e filtering works on the selected filters and when we click on sorting the
-# URL changes to include only sorting irrespective of the filters
-# This is done like mentioned in the homework description, since combination was
-# not required for the current part
 
-    if params[:sort_order].nil?
-      if params[:ratings].nil?
-        @movies = Movie.all
-      else
-        @movies = Movie.where({rating: params[:ratings].keys})
-      end
-    elsif params[:sort_order] == 'byTitle'
-      @movies = Movie.order(:title)
-    elsif params[:sort_order] == 'byReleaseDate'
-      @movies = Movie.order(:release_date)
+    session[:ratings] = params[:ratings] if params[:ratings]
+    session[:sort_order] = params[:sort_order] if params[:sort_order]
+
+    # redirect to RESTful path if session contains more info than provided in params
+    if (!params[:ratings] && session[:ratings]) || (!params[:sort_order] && session[:sort_order])
+      flash.keep
+      redirect_to movies_path(ratings: session[:ratings], sort_order: session[:sort_order])
     end
     
+    # Form DB queries according to the passed sorting and filtering
+    if (session[:sort_order] && !session[:ratings])
+      if session[:sort_order] == 'byTitle'
+        @movies = Movie.order(:title)
+      elsif session[:sort_order] == 'byReleaseDate'
+        @movies = Movie.order(:release_date)
+      end
+    elsif (!session[:sort_order] && session[:ratings])
+      @movies = Movie.where({rating: session[:ratings].keys})
+    elsif (session[:sort_order && session[:ratings]])
+      if session[:sort_order] == 'byTitle'
+        @movies = Movie.where({rating: session[:ratings].keys}).order(:title)
+      elsif session[:sort_order] == 'byReleaseDate'
+        @movies = Movie.where({rating: session[:ratings].keys}).order(:release_date)
+      end
+    else
+      @movies = Movie.all
+    end
+    #if params[:sort_order].nil?
+     # if params[:ratings].nil?
+      #  @movies = Movie.all
+      #else
+       # @movies = Movie.where({rating: params[:ratings].keys})
+      #end
+    #elsif params[:sort_order] == 'byTitle'
+     # @movies = Movie.order(:title)
+    #elsif params[:sort_order] == 'byReleaseDate'
+     # @movies = Movie.order(:release_date)
+    #end
+    
     @all_ratings = Movie.all_ratings
-    if !params[:ratings].nil?
-      @selected_ratings = params[:ratings]
+    if !session[:ratings].nil?
+      @selected_ratings = session[:ratings]
     else
       @selected_ratings = {}
     end
